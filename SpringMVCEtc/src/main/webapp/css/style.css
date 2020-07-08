@@ -1,0 +1,77 @@
+div.body {
+	overflow-y: auto;
+	scrollbar-face-color: #C9BFED;
+	scrollbar-shadow-color: #EDEDED;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+tr.header {
+	background: #C9BFED;
+}
+
+tr.record {
+	background: #EDEDED;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	margin-bottom: 3em;
+}
+
+.menu {
+	display: block;
+	width: 10em;
+	margin: 3px 5px;
+	padding: .5em 1em;
+	text-decoration: none;
+	text-align: center;
+	color: #fff;
+	background-color: rgb(190, 190, 190);
+	border: 2px solid rgb(175, 175, 175);
+	border-radius: 6px;
+	text-shadow: #666 .1em .1em .1em;
+	box-shadow: 0 5px 3px rgba(0, 0, 0, .5);
+	position: relative;
+	-webkit-transition: background-color 0.2s, border-color 0.2s, top .2s,
+		box-shadow 0.2s;
+	-moz-transition: background-color 0.2s, border-color 0.2s, top .2s,
+		box-shadow 0.2s;
+	-o-transition: background-color 0.2s, border-color 0.2s, top .2s,
+		box-shadow 0.2s;
+	-ms-transition: background-color 0.2s, border-color 0.2s, top .2s,
+		box-shadow 0.2s;
+	transition: background-color 0.2s, border-color 0.2s, top .2s,
+		box-shadow 0.2s;
+}
+
+/* a 태그에 포커스가 오거나 마우스가 올라오면 적용
+: 다음에 나오는 것은 가상 선택자, 가상 클래스 */
+a:hover, a:focus {
+	background-color: #fdca00;
+	border-color: #fda700;
+}
+
+a:active {
+	top: 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+
+span {
+	margin: 10px;
+	border: 3px Solid Green;
+	border-radius: 10px;
+	float: left;
+	width: 300px;
+	height: 150px;
+	text-align: center;
+}
+
+h3:hover {
+	color: Red;
+}

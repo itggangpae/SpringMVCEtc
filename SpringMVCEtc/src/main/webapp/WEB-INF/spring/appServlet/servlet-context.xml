@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- Spring MVC Project에서 사용되는 50여가지의 Annotation을 사용할 수 있도록 해주는 설정 -->
+	<annotation-driven />
+
+	<!-- 정적 자원의 경로 설정 -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- 어노테이션이 붙은 클래스의 bean을 자동 생성해주는 패키지 설정 -->
+	<context:component-scan base-package="kr.co.pk" />
+
+	<!-- 여기까지는 제공되는 설정 -->
+
+	<!-- ViewResolver 설정 - 제공되지만 수정 -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+
+	<!-- Controller가 처리하지 못하는 요청을 WAS가 처리하도록 하는 설정 -->
+	<default-servlet-handler />
+
+	<!-- 트랜잭션을 Annotation을 이용해서 사용하기 위한 설정 -->
+	<tx:annotation-driven />
+
+	<!-- 하이버네이트에서 트랜잭션을 사용하기 위한 설정  -->
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory"
+			ref="sessionFactory" />
+	</beans:bean>
+	
+	<!-- 다양한 뷰 출력을 위한 설정 -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />
+	</beans:bean>
+
+	<beans:bean id="download" class="kr.co.pk.view.DownloadView" />
+	<beans:bean id="excel" class="kr.co.pk.view.ExcelView" />
+	<beans:bean id="pdf" class="kr.co.pk.view.PdfView" />
+
+	<beans:bean id="itemlist"
+		class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+	<beans:bean id="marshaller"
+		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<beans:property name="classesToBeBound">
+			<beans:list>
+				<beans:value>kr.co.pk.domain.ItemReport</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="itemReport"
+		class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<beans:property name="marshaller" ref="marshaller" />
+		<beans:property name="modelKey" value="list" />
+	</beans:bean>
+
+	<!-- 스프링 메시지 처리를 위한 설정 -->
+	<beans:bean
+		class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messageSource">
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>message/label</beans:value>
+				<beans:value>message/validation</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="measuringInterceptor"
+		class="kr.co.pk.common.MeasuringInterceptor" />
+	<interceptors>
+		<interceptor>
+			<mapping path="/json.do" />
+			<beans:ref bean="measuringInterceptor" />
+		</interceptor>
+	</interceptors>
+</beans:beans>

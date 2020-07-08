@@ -14,16 +14,17 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private ItemDao itemDao;
+	//private ItemMapper itemDao;
 	
 	@Override
 	@Transactional
 	public List<Item> getAll() {
-		return itemDao.getAll();
+		return itemDao.allitem();
 	}
 
 	@Override
 	@Transactional
 	public Item getItem(Integer itemid) {
-		return itemDao.getItem(itemid);
+		return itemDao.detailitem(itemid);
 	}
 }

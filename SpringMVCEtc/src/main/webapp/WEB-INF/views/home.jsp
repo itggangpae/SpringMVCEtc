@@ -48,6 +48,8 @@
 			
 			<li><a href="exception" class="menu">예외처리</a></li>
 			<li><a href="message" class="menu">스프링 메시지 출력</a></li>
+			<li><a href="fileupload"  class="menu">파일 업로드 처리</a></li>
+			
 		</ul>
 		<div id="disp"></div>
 

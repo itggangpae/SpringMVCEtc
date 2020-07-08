@@ -1,5 +1,8 @@
 package kr.co.pk;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,11 @@ public class ControllerTest {
 	@Autowired
     private WebApplicationContext wac;
 
+	@Autowired
+    private DataSource dataSource;
+	@Autowired
+	private SqlSession sqlSession;
+	
     private MockMvc mockMvc;
     
     @Before
@@ -30,6 +38,8 @@ public class ControllerTest {
     
     @Test
     public void testStart() throws Exception{
-    	mockMvc.perform(MockMvcRequestBuilders.get("/"));
+    	//mockMvc.perform(MockMvcRequestBuilders.get("/"));
+    	System.out.println(dataSource.getConnection());
+    	System.out.println(sqlSession);
     }
 }

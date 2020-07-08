@@ -32,16 +32,23 @@
 	<!-- Controller가 처리하지 못하는 요청을 WAS가 처리하도록 하는 설정 -->
 	<default-servlet-handler />
 
-	<!-- 트랜잭션을 Annotation을 이용해서 사용하기 위한 설정 -->
+
 	<tx:annotation-driven />
 
-	<!-- 하이버네이트에서 트랜잭션을 사용하기 위한 설정  -->
 	<beans:bean id="transactionManager"
-		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<beans:property name="sessionFactory"
-			ref="sessionFactory" />
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>
-	
+
+
+	<!-- 하이버네이트에서 트랜잭션을 사용하기 위한 설정 -->
+	<!-- <beans:bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"> 
+		<beans:property name="sessionFactory" ref="sessionFactory" /> </beans:bean> -->
+
+	<!-- 트랜잭션을 Annotation을 이용해서 사용하기 위한 설정 -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
 	<!-- 다양한 뷰 출력을 위한 설정 -->
 	<beans:bean
 		class="org.springframework.web.servlet.view.BeanNameViewResolver">
@@ -81,6 +88,13 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+
+
+	<!-- 파일 업로드를 위한 bean -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</beans:bean>
+
 
 	<beans:bean id="measuringInterceptor"
 		class="kr.co.pk.common.MeasuringInterceptor" />

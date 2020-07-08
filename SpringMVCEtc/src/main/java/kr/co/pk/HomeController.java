@@ -1,9 +1,13 @@
 package kr.co.pk;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -18,12 +22,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.pk.domain.DataStructure;
 import kr.co.pk.domain.Item;
 import kr.co.pk.domain.ItemReport;
 import kr.co.pk.domain.Member;
+import kr.co.pk.domain.ReportCommand;
 import kr.co.pk.service.ItemService;
 import kr.co.pk.service.ViewService;
 import kr.co.pk.validator.MemberValidator;
@@ -162,4 +169,55 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping(value = "fileupload", method = RequestMethod.GET)
+	public String form() {
+		return "submissionform";
+	}
+
+	@RequestMapping(value = "fileupload1.action", method = RequestMethod.POST)
+	public String submitReport1(@RequestParam("studentNumber") String studentNumber,
+			@RequestParam("report") MultipartFile report) {
+		printInfo(studentNumber, report);
+		return "submissioncomplete";
+	}
+
+	private void printInfo(String studentNumber, MultipartFile report) {
+		System.out.println(studentNumber + "가 업로드 한 파일: " + report.getOriginalFilename());
+	}
+	
+	@RequestMapping(value = "fileupload2.action", method = RequestMethod.POST)
+	public String submitReport2(MultipartHttpServletRequest request) {
+		String studentNumber = request.getParameter("studentNumber");
+		MultipartFile report = request.getFile("report");
+		printInfo(studentNumber, report);
+		return "submissioncomplete";
+	}
+
+	@RequestMapping(value = "fileupload3.action", method = RequestMethod.POST)
+	public String submitReport3(ReportCommand reportCommand, HttpServletRequest request) {
+		printInfo(reportCommand.getStudentNumber(), reportCommand.getReport());
+		if (reportCommand.getReport().isEmpty()) {
+			System.out.println("업로드한 파일이 없습니다.");
+		} else {
+			
+			String filePath = request.getServletContext().getRealPath("/img");
+			filePath = filePath + "/" + UUID.randomUUID() + reportCommand.getReport().getOriginalFilename();
+			System.out.println("filePath:" + filePath);
+			File file = new File(filePath);
+			FileOutputStream fos = null;
+			try {
+				fos = new FileOutputStream(file);
+			} catch (FileNotFoundException e1) {
+			}
+			try {
+				fos.write(reportCommand.getReport().getBytes());
+				System.out.println("fos:" + fos);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("전송 실패");
+			}
+		}
+		return "submissioncomplete";
+	}
 }
